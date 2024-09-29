@@ -20,6 +20,7 @@ input_json_path = "./ngos_list.json"
 
 with open(input_json_path, 'r', encoding='utf-8') as file:
     json_data = json.load(file)
+
 df = pd.DataFrame(json_data)
 embedding_cache_path = "recommendations_embeddings_cache.pkl"
 try:
@@ -117,9 +118,16 @@ def knn_search():
         return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred."}), 500
+    
+
+@app.route('/list-ngos', methods=['GET'])
+def get_ngos():
+    uuids = request.args.getlist('uuid')
+    
+    matched_ngos = [ngo for ngo in json_data if ngo['ID'] in uuids]
+    
+    return jsonify(matched_ngos)
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-    
