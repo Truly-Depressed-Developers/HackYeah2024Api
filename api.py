@@ -12,6 +12,8 @@ from embeddings_utils import (
     indices_of_nearest_neighbors_from_distances,
 )
 
+from flask_cors import CORS
+
 #model
 EMBEDDING_MODEL = "text-embedding-3-small"
 
@@ -91,6 +93,8 @@ index_of_source_string = len(article_descriptions) - 1
 
 
 app = Flask(__name__)
+
+CORS(app)
 
 @app.route('/search', methods=['GET'])
 def knn_search():
