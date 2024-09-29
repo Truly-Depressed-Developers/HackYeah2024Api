@@ -122,18 +122,16 @@ def knn_search():
 
 @app.route('/list-ngos', methods=['GET'])
 def get_ngos():
+    # Get the array of UUIDs from the query parameters
     uuids = request.args.getlist('uuid')
     
+    # Filter ngos_data to find objects that match the given UUIDs and exclude specific fields
     matched_ngos = [
-        {
-            'ID': ngo['ID'],
-            'name': ngo['Nazwa Organizacji'],
-            'location': ngo['Lokacja'],
-            'bio': ngo['Opis']
-        }
+        {k: v for k, v in ngo.items() if k not in ['combined', 'n_tokens', 'embedding']}
         for ngo in json_data if ngo['ID'] in uuids
     ]
-
+    
+    # Return the matched objects as JSON
     return jsonify(matched_ngos)
 
 
