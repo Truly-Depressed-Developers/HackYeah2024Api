@@ -124,8 +124,16 @@ def knn_search():
 def get_ngos():
     uuids = request.args.getlist('uuid')
     
-    matched_ngos = [ngo for ngo in json_data if ngo['ID'] in uuids]
-    
+    matched_ngos = [
+        {
+            'ID': ngo['ID'],
+            'name': ngo['Nazwa Organizacji'],
+            'location': ngo['Lokacja'],
+            'bio': ngo['Opis']
+        }
+        for ngo in json_data if ngo['ID'] in uuids
+    ]
+
     return jsonify(matched_ngos)
 
 
